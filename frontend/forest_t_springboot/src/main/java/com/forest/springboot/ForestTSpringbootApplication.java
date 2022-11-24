@@ -1,4 +1,4 @@
-package com.forest.forest_t_springboot;
+package com.forest.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
