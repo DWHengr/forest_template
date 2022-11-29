@@ -1,5 +1,17 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from 'vue';
+import { setupNaive } from './utils/naive';
+import router from './router';
+import App from './App.vue';
 
-createApp(App).mount('#app')
+async function bootstrap() {
+  const app = createApp(App);
+
+  setupNaive(app);
+
+  app.use(router);
+  await router.isReady();
+
+  app.mount('#app', true);
+}
+
+void bootstrap();
