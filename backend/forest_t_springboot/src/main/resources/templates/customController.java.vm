@@ -1,0 +1,109 @@
+package ${package.Controller};
+
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+import com.tfiip.aop.utils.PageUtil;
+import com.tfiip.aop.utils.ResultUtil;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+import lombok.extern.slf4j.Slf4j;
+
+import ${package.Service}.${table.serviceName};
+import ${package.Entity}.${entity};
+
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Api(tags = "$!{table.comment}")
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+@Slf4j
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+
+    @Resource
+    private ${table.serviceName} ${table.entityPath}Service;
+
+    @ApiOperation("创建")
+    @PostMapping("/create")
+    public Object create(@RequestBody ${entity} ${table.entityPath}) {
+        log.info("$!{table.comment}创建，${entity}:{}", ${table.entityPath});
+        boolean flag = ${table.entityPath}Service.save(${table.entityPath});
+        return ResultUtil.ResultByFlag(flag);
+    }
+
+    @ApiOperation("更新")
+    @PostMapping("/update")
+    public Object update(${entity} ${table.entityPath}) {
+        log.info("$!{table.comment}更新，${entity}:{}", ${table.entityPath});
+        boolean flag = ${table.entityPath}Service.updateById(${table.entityPath});
+        return ResultUtil.ResultByFlag(flag);
+    }
+
+    @ApiOperation("删除")
+    @PostMapping("/deletes")
+    public Object deletes(@RequestBody List<String> ids) {
+        log.info("$!{table.comment}删除，ids:{}", ids);
+        boolean flag = ${table.entityPath}Service.removeByIds(ids);
+        return ResultUtil.ResultByFlag(flag);
+    }
+
+    @ApiOperation("查询全部")
+    @GetMapping("/list")
+    public Object List() {
+        List<${entity}> result = ${table.entityPath}Service.list();
+        return ResultUtil.Succeed(result);
+    }
+
+    @ApiOperation("根据id查询")
+    @GetMapping("/{id}")
+    public Object findOne(@PathVariable Integer id) {
+        ${entity} result = ${table.entityPath}Service.getById(id);
+        return ResultUtil.Succeed(result);
+    }
+
+    @ApiOperation("分页查询")
+    @PostMapping("/page")
+    public Object page(@RequestBody PageUtil.Query query) {
+        QueryWrapper<${entity}> queryWrapper = new QueryWrapper<>();
+        queryWrapper = PageUtil.Wrapper(queryWrapper, query);
+        Page<${entity}> result = ${table.entityPath}Service.page(new Page<>(query.getPageNum(), query.getPageSize()), queryWrapper);
+        return ResultUtil.Succeed(result);
+    }
+}
+#end
+
