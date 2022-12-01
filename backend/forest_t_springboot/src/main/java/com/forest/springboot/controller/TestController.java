@@ -1,6 +1,10 @@
 package com.forest.springboot.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.forest.springboot.utils.PageUtil;
+import com.forest.springboot.utils.ResultUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -70,6 +74,15 @@ public class TestController {
     public Object findOne(@PathVariable Integer id) {
         Test result = testService.getById(id);
         return result;
+    }
+
+    @ApiOperation("分页查询")
+    @PostMapping("/page")
+    public Object page(@RequestBody PageUtil.Query query) {
+        QueryWrapper<Test> queryWrapper = new QueryWrapper<>();
+        queryWrapper = PageUtil.Wrapper(queryWrapper, query);
+        Page<Test> result = testService.page(new Page<>(query.getPageNum(), query.getPageSize()), queryWrapper);
+        return ResultUtil.Succeed(result);
     }
 }
 
