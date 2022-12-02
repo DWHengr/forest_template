@@ -1,31 +1,63 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <NConfigProvider :theme-overrides="ThemeOverrides" :locale="zhCN" :date-locale="dateZhCN">
+    <NMessageProvider>
+      <NDialogProvider>
+        <n-loading-bar-provider>
+          <RouterView />
+        </n-loading-bar-provider>
+      </NDialogProvider>
+    </NMessageProvider>
+  </NConfigProvider>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<script setup>
+import { zhCN, dateZhCN } from 'naive-ui';
+const ThemeOverrides = {
+  common: {
+    primaryColor: '#8b5cf6',
+    primaryColorHover: '#6d28d9',
+    primaryColorPressed: '#6d28d9',
+    primaryColorSuppl: '#6d28d9',
+    borderRadius: '5px',
+    iconColor: '#6d28d9',
+    fontWeight: 600,
+  },
+  Message: {
+    iconColorSuccess: '#6d28d9',
+  },
+  Tag: {
+    colorInfo: '#ddd6fe',
+    textColorInfo: '#6d28d9',
+  },
+  Dialog: {
+    iconColorWarning: '#6d28d9',
+    peers: {
+      Button: {
+        colorWarning: '#8b5cf6',
+        colorHoverWarning: '#6d28d9',
+        colorPressedWarning: '#6d28d9',
+        colorFocusWarning: '#6d28d9',
+        borderWarning: '#8b5cf6',
+        borderHoverWarning: '#8b5cf6',
+        borderPressedWarning: '#8b5cf6',
+        borderFocusWarning: '#8b5cf6',
+      },
+    },
+  },
+  DataTable: {
+    tdColorHover: '#e5e0ff',
+  },
+  Dropdown: {
+    color: '#ddd6fe',
+  },
+  LoadingBar: {
+    colorLoading: '#B67AFF',
+    height: '5px',
+  },
+  Form: {
+    feedbackTextColor: '#8b5cf6',
+  },
+};
+</script>
+
+<style></style>
